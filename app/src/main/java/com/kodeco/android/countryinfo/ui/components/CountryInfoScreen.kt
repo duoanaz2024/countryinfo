@@ -56,12 +56,19 @@ fun CountryInfoScreen(apiService: RemoteApiService, navigateToProfile: (Country)
                         countryState = CountryInfoState.Success(response)
                     }
                 }catch (e: HttpException){
+                    Log.d("INFO", "Http Exception Occurred: " + e.message)
                     countryState = CountryInfoState.Error(e.message)
                 }catch (e: IOException){
+                    Log.d("INFO", "IO Exception Occurred: " + e.message)
                     countryState = CountryInfoState.Error(e.message)
                 }
-                catch (e: Exception){
+                catch (e: IllegalStateException) {
+                    Log.d("INFO", "Illegal State Exception Occurred: " + e.message)
                     countryState = CountryInfoState.Loading
+                }
+                catch (e: Exception){
+                    Log.d("INFO", "Generic Exception Occurred: " + e.message)
+                    countryState = CountryInfoState.Error(e.message)
                 }
 
                 when (countryState) {
