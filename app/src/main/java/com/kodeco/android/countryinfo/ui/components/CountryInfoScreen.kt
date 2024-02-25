@@ -23,6 +23,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.compose.rememberNavController
 import com.kodeco.android.countryinfo.model.Country
 import com.kodeco.android.countryinfo.networking.RemoteApiService
+import com.kodeco.android.countryinfo.networking.buildApiService
 import com.kodeco.android.countryinfo.util.CountryInfoState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -102,7 +103,11 @@ fun CountryInfoScreen(apiService: RemoteApiService) {
 
 }
 
-// TODO fill out the preview.
+
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Preview
 @Composable
-fun CountryInfoScreenPreview() { }
+fun CountryInfoScreenPreview() {
+    val apiService by lazy { buildApiService() }
+    CountryInfoScreen(apiService)
+}
