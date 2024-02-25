@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.kodeco.android.countryinfo.ui.theme.MyApplicationTheme
 
 @Composable
-fun CountryInfoRow(country  : Country) {
+fun CountryInfoRow(country  : Country, navigateToProfile: (Country) -> Unit) {
     val c: String? = country.capital?.get(0)
     val capital: String = c ?: "Not Applicable"
     Card(
@@ -32,6 +32,7 @@ fun CountryInfoRow(country  : Country) {
             containerColor = MaterialTheme.colorScheme.primary,
         ),
         modifier = Modifier
+            .clickable { navigateToProfile(country) }
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(10.dp)

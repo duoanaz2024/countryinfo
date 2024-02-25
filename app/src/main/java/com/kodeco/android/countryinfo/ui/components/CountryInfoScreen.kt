@@ -20,6 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kodeco.android.countryinfo.model.Country
 import com.kodeco.android.countryinfo.networking.RemoteApiService
@@ -33,7 +36,7 @@ import java.io.IOException
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
-fun CountryInfoScreen(apiService: RemoteApiService) {
+fun CountryInfoScreen(apiService: RemoteApiService, navigateToProfile: (Country) -> Unit) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
@@ -96,10 +99,11 @@ fun CountryInfoScreen(apiService: RemoteApiService) {
                 onClick = {  })
         }
         else{
-            CountryInfoList(countryList)
+            CountryInfoList(countryList, navigateToProfile = navigateToProfile)
         }
 
     }
+
 
 }
 
@@ -109,5 +113,5 @@ fun CountryInfoScreen(apiService: RemoteApiService) {
 @Composable
 fun CountryInfoScreenPreview() {
     val apiService by lazy { buildApiService() }
-    CountryInfoScreen(apiService)
+    // CountryInfoScreen(apiService)
 }

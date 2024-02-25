@@ -5,8 +5,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.navigation.NavHostController
 import com.kodeco.android.countryinfo.model.Country
+import com.kodeco.android.countryinfo.ui.components.CountryDetailsScreen
 import com.kodeco.android.countryinfo.ui.theme.MyApplicationTheme
 
 class CountryActivity : AppCompatActivity() {
@@ -20,7 +25,7 @@ class CountryActivity : AppCompatActivity() {
 
         setContent {
             MyApplicationTheme {
-                Text(text = "Hello World")
+                CountryDetailsScreen(country)
             }
         }
     }

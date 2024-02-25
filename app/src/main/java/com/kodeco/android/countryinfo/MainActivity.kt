@@ -1,13 +1,11 @@
 package com.kodeco.android.countryinfo
 
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresExtension
-import androidx.navigation.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.kodeco.android.countryinfo.networking.NetworkStatusChecker
 import com.kodeco.android.countryinfo.networking.buildApiService
@@ -28,7 +26,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MyApplicationTheme {
-                CountryInfoScreen(apiService)
+                CountryInfoScreen(apiService){
+                    startActivity(CountryActivity.newIntent(this, it))
+                }
                 }
             }
         }
