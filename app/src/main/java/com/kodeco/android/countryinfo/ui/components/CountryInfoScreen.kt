@@ -20,9 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kodeco.android.countryinfo.model.Country
 import com.kodeco.android.countryinfo.networking.RemoteApiService
@@ -95,15 +92,13 @@ fun CountryInfoScreen(apiService: RemoteApiService, navigateToProfile: (Country)
         else if (countryList.isEmpty() && errorState == 1){
             CountryErrorScreen(
                 headline = "Error",
-                subtitle = "Something Went Wrong",
-                onClick = {  })
+                subtitle = "Something Went Wrong")
         }
         else{
-            CountryInfoList(countryList, navigateToProfile = navigateToProfile)
+            CountryInfoList(countryList, navigateToProfile)
         }
 
     }
-
 
 }
 

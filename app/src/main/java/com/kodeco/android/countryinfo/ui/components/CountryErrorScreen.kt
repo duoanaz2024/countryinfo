@@ -1,5 +1,7 @@
 package com.kodeco.android.countryinfo.ui.components
 
+import android.app.Activity
+import android.content.Intent.getIntent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,13 +21,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kodeco.android.countryinfo.R
 
 @Composable
-fun CountryErrorScreen(headline: String, subtitle: String, onClick: ((Unit) -> Unit)) {
+fun CountryErrorScreen(headline: String, subtitle: String) {
+    val activity = (LocalContext.current as? Activity)
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -54,7 +58,11 @@ fun CountryErrorScreen(headline: String, subtitle: String, onClick: ((Unit) -> U
         Button(modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp)
-            .align(alignment = Alignment.BottomCenter), onClick = { onClick.invoke(Unit) }) {
+            .align(alignment = Alignment.BottomCenter),
+            onClick = {
+                activity?.finish()
+                activity?.startActivity(activity.intent);
+            }) {
             Text("Refresh")
         }
     }

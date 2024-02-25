@@ -1,6 +1,8 @@
 package com.kodeco.android.countryinfo.ui.components
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +34,7 @@ import com.kodeco.android.countryinfo.model.Country
 fun CountryDetailsScreen(country: Country) {
     val c: String? = country.capital?.get(0)
     val capital: String = c ?: "Not Applicable"
+    val activity = (LocalContext.current as? Activity)
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
@@ -53,6 +56,7 @@ fun CountryDetailsScreen(country: Country) {
                     ),
                     navigationIcon = {
                         IconButton(onClick = {
+                            activity?.finish()
 
                         }) {
                             Icon(Icons.Filled.ArrowBack, "backIcon")
