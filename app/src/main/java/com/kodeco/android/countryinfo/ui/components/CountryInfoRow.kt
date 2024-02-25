@@ -29,7 +29,7 @@ fun CountryInfoRow(country  : Country, navigateToProfile: (Country) -> Unit) {
     val capital: String = c ?: "Not Applicable"
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary,
+            containerColor = MaterialTheme.colorScheme.secondary,
         ),
         modifier = Modifier
             .clickable { navigateToProfile(country) }
