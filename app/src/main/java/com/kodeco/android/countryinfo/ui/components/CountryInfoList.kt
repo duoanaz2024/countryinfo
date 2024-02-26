@@ -11,12 +11,12 @@ import com.kodeco.android.countryinfo.model.Country
 
 // TODO fill out CountryInfoList
 @Composable
-fun CountryInfoList(countryList: List<Country>, navigateToProfile: (Country) -> Unit) {
+fun CountryInfoList(countryList: List<Country>, navigateToDetails: (Country) -> Unit) {
 
     LazyColumn {
         items(countryList.size) { index ->
             CountryInfoRow(country = countryList[index],
-                navigateToProfile)
+                navigateToDetails)
         }
 
     }

@@ -33,23 +33,21 @@ import java.io.IOException
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
-fun CountryInfoScreen(apiService: RemoteApiService, navigateToProfile: (Country) -> Unit) {
+fun CountryInfoScreen(apiService: RemoteApiService, navigateToDetails: (Country) -> Unit) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
-        var countryList by rememberSaveable(Unit) {
-            mutableStateOf(listOf<Country>())
-        }
-        var errorState by rememberSaveable { mutableIntStateOf(0) }
 
+        var countryState by rememberSaveable {
+            mutableStateOf<CountryInfoState>(CountryInfoState.Loading)
+        }
 
         val scope = rememberCoroutineScope()
         LaunchedEffect(key1 = true){
 
             scope.launch(Dispatchers.IO) {
                 delay(1000)
-                var countryState: CountryInfoState? = null
                 try{
                     val response = apiService.getCountries()
                     if (response.isNotEmpty()){
@@ -71,38 +69,24 @@ fun CountryInfoScreen(apiService: RemoteApiService, navigateToProfile: (Country)
                     countryState = CountryInfoState.Error(e.message)
                 }
 
-                when (countryState) {
-                    is CountryInfoState.Success -> {
-                        countryList = countryState.countries
-                        errorState = 0
-                    }
-                    is CountryInfoState.Error -> {
-                        Log.d("INFO", "Exception Occurred: " + countryState.message)
-                        countryList = emptyList()
-                        errorState = 1
-
-                    }
-                    is CountryInfoState.Loading -> {
-                        errorState = 0
-                    }
-                    else -> {}
-                }
-
-
             }
 
         }
 
-        if (countryList.isEmpty() && errorState == 0){
-            Loading()
-        }
-        else if (countryList.isEmpty() && errorState == 1){
-            CountryErrorScreen(
-                headline = "Error",
-                subtitle = "Something Went Wrong")
-        }
-        else{
-            CountryInfoList(countryList, navigateToProfile)
+        when (countryState) {
+            is CountryInfoState.Success -> {
+                val countryList = (countryState as CountryInfoState.Success).countries
+                CountryInfoList(countryList, navigateToDetails)
+            }
+            is CountryInfoState.Error -> {
+                CountryErrorScreen(
+                    headline = "Error",
+                    subtitle = "Something Went Wrong")
+
+            }
+            is CountryInfoState.Loading -> {
+                Loading()
+            }
         }
 
     }
