@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresExtension
-import androidx.navigation.compose.rememberNavController
 import com.kodeco.android.countryinfo.networking.NetworkStatusChecker
 import com.kodeco.android.countryinfo.networking.buildApiService
 import com.kodeco.android.countryinfo.ui.components.CountryErrorScreen
@@ -27,16 +26,16 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MyApplicationTheme {
+
                 if (networkStatusChecker.hasInternetConnection()){
-                    CountryInfoScreen(apiService){
-                        startActivity(CountryActivity.newIntent(this, it))
-                    }
+                    CountryInfoScreen(apiService)
 
                 }
                 else{
                     CountryErrorScreen(
                         headline = "No Internet Connection",
-                        subtitle = "Please Connect To Network")
+                        subtitle = "Please Connect To Network"
+                    )
                 }
                 }
             }

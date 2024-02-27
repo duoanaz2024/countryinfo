@@ -2,7 +2,6 @@ package com.kodeco.android.countryinfo.ui.components
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,10 +27,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.kodeco.android.countryinfo.model.Country
+import com.kodeco.android.countryinfo.util.CountryInfoState
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CountryDetailsScreen(country: Country) {
+fun CountryDetailsScreen(country: Country, countryList: List<Country>, updateDetails: (CountryInfoState) -> Unit) {
     val c: String? = country.capital?.get(0)
     val capital: String = c ?: "Not Applicable"
     val activity = (LocalContext.current as? Activity)
@@ -56,7 +56,9 @@ fun CountryDetailsScreen(country: Country) {
                     ),
                     navigationIcon = {
                         IconButton(onClick = {
-                            activity?.finish()
+                            //activity?.finish()
+                            updateDetails(CountryInfoState.Success(countryList))
+
 
                         }) {
                             Icon(Icons.Filled.ArrowBack, "backIcon")
