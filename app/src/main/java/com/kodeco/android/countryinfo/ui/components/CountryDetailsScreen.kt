@@ -26,15 +26,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import com.kodeco.android.countryinfo.flow.Flows
 import com.kodeco.android.countryinfo.model.Country
 import com.kodeco.android.countryinfo.util.CountryInfoState
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CountryDetailsScreen(country: Country, countryList: List<Country>, updateDetails: (CountryInfoState) -> Unit) {
+fun CountryDetailsScreen(country: Country, updateDetails: () -> Unit) {
     val c: String? = country.capital?.get(0)
     val capital: String = c ?: "Not Applicable"
-    val activity = (LocalContext.current as? Activity)
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
@@ -56,10 +56,8 @@ fun CountryDetailsScreen(country: Country, countryList: List<Country>, updateDet
                     ),
                     navigationIcon = {
                         IconButton(onClick = {
-                            //activity?.finish()
-                            updateDetails(CountryInfoState.Success(countryList))
-
-
+                            Flows.tapBack()
+                            updateDetails()
                         }) {
                             Icon(Icons.Filled.ArrowBack, "backIcon")
                         }
