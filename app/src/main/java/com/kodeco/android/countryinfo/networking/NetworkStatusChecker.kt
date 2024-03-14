@@ -11,7 +11,6 @@ class NetworkStatusChecker(private val connectivityManager: ConnectivityManager?
 
         return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
                 || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
 
     }
 

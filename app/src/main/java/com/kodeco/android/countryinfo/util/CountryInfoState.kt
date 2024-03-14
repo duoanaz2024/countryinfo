@@ -10,8 +10,5 @@ sealed class CountryInfoState : Parcelable {
     }
     class Error(val message: String?) : CountryInfoState(){
     }
-    class CountryDetails(val country: Country, val countries: List<Country>):CountryInfoState(){
-    }
-
     data object Loading : CountryInfoState()
 }

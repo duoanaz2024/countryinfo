@@ -9,25 +9,22 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import com.kodeco.android.countryinfo.model.Country
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.kodeco.android.countryinfo.util.CountryInfoState
 
 @Composable
-fun CountryInfoRow(country: Country, countryList: List<Country>, updateDetails: (CountryInfoState) -> Unit) {
+fun CountryInfoRow(country: Country, updateDetails: () -> Unit) {
     val c: String? = country.capital?.get(0)
     val capital: String = c ?: "Not Applicable"
-    //val context = LocalContext.current
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondary,
         ),
         modifier = Modifier
             .clickable {
-                updateDetails(CountryInfoState.CountryDetails(country, countryList))
+                updateDetails()
             }
             .fillMaxWidth()
             .wrapContentHeight()
@@ -46,7 +43,3 @@ fun CountryInfoRow(country: Country, countryList: List<Country>, updateDetails: 
 
 }
 
-// TODO fill out the preview.
-@Preview
-@Composable
-fun CountryInfoRowPreview() { }
