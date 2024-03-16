@@ -21,10 +21,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.kodeco.android.countryinfo.flow.Flows
+import com.kodeco.android.countryinfo.ui.screens.countryinfo.CountryInfoViewModel
 
 @Composable
-fun Loading() {
+fun Loading(upTime: Int) {
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -32,9 +32,8 @@ fun Loading() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row{
-            val seconds by Flows.counterFlow.collectAsState(0)
-            val minutes = seconds / 60
-            val remainingSeconds = seconds % 60
+            val minutes = upTime / 60
+            val remainingSeconds = upTime % 60
             val counter = String.format("%02d:%02d", minutes, remainingSeconds)
             Text(text = "Loading... App Up Time: $counter",
                 Modifier.padding(6.dp))
@@ -45,8 +44,3 @@ fun Loading() {
 
 }
 
-// TODO fill out preview. NOTE this is above-and-beyond the requirements
-//  for the homework assignment.
-@Preview
-@Composable
-fun LoadingPreview() { }
