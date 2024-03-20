@@ -1,4 +1,4 @@
-package com.kodeco.android.countryinfo.ui.components
+package com.kodeco.android.countryinfo.ui.screens.countrydetails
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.kodeco.android.countryinfo.flow.Flows
 import com.kodeco.android.countryinfo.model.Country
 import com.kodeco.android.countryinfo.util.CountryInfoState
 
@@ -56,7 +55,6 @@ fun CountryDetailsScreen(country: Country, updateDetails: () -> Unit) {
                     ),
                     navigationIcon = {
                         IconButton(onClick = {
-                            Flows.tapBack()
                             updateDetails()
                         }) {
                             Icon(Icons.Filled.ArrowBack, "backIcon")
@@ -98,9 +96,3 @@ fun CountryDetailsScreen(country: Country, updateDetails: () -> Unit) {
 
 
 }
-
-// TODO fill out the preview. NOTE this is above-and-beyond the required
-////  section of the homework assignment.
-@Preview
-@Composable
-fun CountryDetailsScreenPreview() { }

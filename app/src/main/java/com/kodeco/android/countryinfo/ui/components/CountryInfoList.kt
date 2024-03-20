@@ -12,25 +12,27 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.kodeco.android.countryinfo.flow.Flows
 import com.kodeco.android.countryinfo.model.Country
+import com.kodeco.android.countryinfo.ui.screens.countrydetails.CountryDetailsScreen
+
 
 @Composable
 fun CountryInfoList(countryList: List<Country>, onRefreshClick: () -> Unit) {
 
     var selectedCountry: Country? by rememberSaveable { mutableStateOf(null) }
+    var tapCount by rememberSaveable { mutableIntStateOf(0) }
+    var backCount by rememberSaveable { mutableIntStateOf(0) }
 
     Column {
-        // TODO: Implement the Row composable here that contains the
-        //  the tap/back flow data and the refresh button.
 
         Row(modifier = Modifier
             .fillMaxWidth()
@@ -38,9 +40,6 @@ fun CountryInfoList(countryList: List<Country>, onRefreshClick: () -> Unit) {
             .padding(10.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically) {
-
-            val tapCount by Flows.tapFlow.collectAsState(0)
-            val backCount by Flows.backFlow.collectAsState(0)
 
             Text(text = "Taps: $tapCount",
                 Modifier.padding(6.dp))
@@ -59,13 +58,16 @@ fun CountryInfoList(countryList: List<Country>, onRefreshClick: () -> Unit) {
         }
 
         selectedCountry?.let { country ->
-            CountryDetailsScreen(country) { selectedCountry = null }
+            CountryDetailsScreen(country) {
+                selectedCountry = null
+                backCount += 1
+            }
         } ?: run {
             LazyColumn {
                 items(countryList) { country ->
                     CountryInfoRow(country) {
                         selectedCountry = country
-                        Flows.tap()
+                        tapCount += 1
                     }
                 }
             }

@@ -1,7 +1,5 @@
 package com.kodeco.android.countryinfo
 
-import android.app.Activity
-import android.util.Log
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Build
@@ -9,11 +7,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresExtension
-import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kodeco.android.countryinfo.networking.NetworkStatusChecker
 import com.kodeco.android.countryinfo.networking.buildApiService
+import com.kodeco.android.countryinfo.repositories.CountryRepositoryImpl
 import com.kodeco.android.countryinfo.ui.components.CountryErrorScreen
-import com.kodeco.android.countryinfo.ui.components.CountryInfoScreen
+import com.kodeco.android.countryinfo.ui.screens.countryinfo.CountryInfoScreen
+import com.kodeco.android.countryinfo.ui.screens.countryinfo.CountryInfoViewModel
 import com.kodeco.android.countryinfo.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -32,7 +32,14 @@ class MainActivity : ComponentActivity() {
             MyApplicationTheme {
 
                 if (networkStatusChecker.hasInternetConnection()){
-                    CountryInfoScreen(apiService)
+                    CountryInfoScreen(
+                        viewModel = viewModel(
+                            factory = CountryInfoViewModel.CountryInfoViewModelFactory(
+                                repository = CountryRepositoryImpl(apiService),
+                            ),
+                        ),
+                    )
+
 
                 }
                 else{
