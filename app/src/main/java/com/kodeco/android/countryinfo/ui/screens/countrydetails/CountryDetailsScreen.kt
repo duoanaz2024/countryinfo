@@ -2,6 +2,7 @@ package com.kodeco.android.countryinfo.ui.screens.countrydetails
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,67 +32,71 @@ import com.kodeco.android.countryinfo.util.CountryInfoState
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CountryDetailsScreen(country: Country, updateDetails: () -> Unit) {
-    val c: String? = country.capital?.get(0)
-    val capital: String = c ?: "Not Applicable"
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Color.White
-    ) {
-        Scaffold(
-            containerColor = Color.White,
-            contentColor = Color.Black,
+fun CountryDetailsScreen(viewModel: CountryDetailsViewModel,
+                         onNavigateUp: () -> Unit) {
+    val country = viewModel.country
+    if (country != null){
+        val c: String? = country.capital?.get(0)
+        val capital: String = c ?: "Not Applicable"
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = Color.White
+        ) {
+            Scaffold(
+                containerColor = Color.White,
+                contentColor = Color.Black,
 
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(text = country.commonName)
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.White,
-                        titleContentColor = Color.Black,
-                        navigationIconContentColor = Color.Black,
-                        actionIconContentColor = Color.Black
-                    ),
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            updateDetails()
-                        }) {
-                            Icon(Icons.Filled.ArrowBack, "backIcon")
-                        }
-                    }
-                )
-            }, content = {
-                Column() {
-                    Spacer(modifier = Modifier.height(75.dp))
-                    Text(text = "Capital: $capital",
-                        Modifier.padding(6.dp))
-                    Text(text = "Population: " + country.population,
-                        Modifier.padding(6.dp))
-                    Text(text = "Area: " + country.area,
-                        Modifier.padding(6.dp))
-                    SubcomposeAsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(country.commonFlag)
-                            .crossfade(true)
-                            .build(),
-                        loading = {
-                            CircularProgressIndicator()
+                topBar = {
+                    TopAppBar(
+                        title = {
+                            Text(text = country.commonName)
                         },
-                        contentDescription = "Country Flag",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.padding(6.dp)
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = Color.White,
+                            titleContentColor = Color.Black,
+                            navigationIconContentColor = Color.Black,
+                            actionIconContentColor = Color.Black
+                        ),
+                        navigationIcon = {
+                            IconButton(onClick = {
+                                onNavigateUp()
+                            }) {
+                                Icon(Icons.Filled.ArrowBack, "backIcon")
+                            }
+                        }
                     )
+                }, content = {
+                    Column() {
+                        Spacer(modifier = Modifier.height(75.dp))
+                        Text(text = "Capital: $capital",
+                            Modifier.padding(6.dp))
+                        Text(text = "Population: " + country.population,
+                            Modifier.padding(6.dp))
+                        Text(text = "Area: " + country.area,
+                            Modifier.padding(6.dp))
+                        SubcomposeAsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(country.commonFlag)
+                                .crossfade(true)
+                                .build(),
+                            loading = {
+                                CircularProgressIndicator()
+                            },
+                            contentDescription = "Country Flag",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.padding(6.dp)
+                        )
 
 
-                }
+                    }
 
-            })
+                })
 
+        }
 
-
-
-
+    }
+    else{
+        Log.d("INFO", "Country is Null")
     }
 
 

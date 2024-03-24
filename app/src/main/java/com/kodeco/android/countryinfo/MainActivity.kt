@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresExtension
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kodeco.android.countryinfo.nav.CountryInfoNavHost
 import com.kodeco.android.countryinfo.networking.NetworkStatusChecker
 import com.kodeco.android.countryinfo.networking.buildApiService
 import com.kodeco.android.countryinfo.repositories.CountryRepositoryImpl
@@ -32,14 +33,7 @@ class MainActivity : ComponentActivity() {
             MyApplicationTheme {
 
                 if (networkStatusChecker.hasInternetConnection()){
-                    CountryInfoScreen(
-                        viewModel = viewModel(
-                            factory = CountryInfoViewModel.CountryInfoViewModelFactory(
-                                repository = CountryRepositoryImpl(apiService),
-                            ),
-                        ),
-                    )
-
+                    CountryInfoNavHost(repository = CountryRepositoryImpl(apiService))
 
                 }
                 else{

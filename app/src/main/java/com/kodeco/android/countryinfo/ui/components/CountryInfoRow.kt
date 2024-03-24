@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CountryInfoRow(country: Country, updateDetails: () -> Unit) {
+fun CountryInfoRow(country: Country, updateCountryDetails: () -> Unit) {
     val c: String? = country.capital?.get(0)
     val capital: String = c ?: "Not Applicable"
     Card(
@@ -24,7 +24,7 @@ fun CountryInfoRow(country: Country, updateDetails: () -> Unit) {
         ),
         modifier = Modifier
             .clickable {
-                updateDetails()
+                updateCountryDetails()
             }
             .fillMaxWidth()
             .wrapContentHeight()
