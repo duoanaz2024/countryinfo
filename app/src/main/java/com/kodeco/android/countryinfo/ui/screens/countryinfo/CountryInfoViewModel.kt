@@ -39,10 +39,9 @@ class CountryInfoViewModel(private val repository: CountryRepository) : ViewMode
     init {
         refreshCountries()
         viewModelScope.launch {
-            var timer = 0
             while (true){
                 delay(1000)
-                _counterFlow.value = timer++
+                _counterFlow.value++
             }
 
         }
