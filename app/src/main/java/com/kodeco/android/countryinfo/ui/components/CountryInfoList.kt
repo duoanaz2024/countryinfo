@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -33,10 +34,10 @@ import com.kodeco.android.countryinfo.ui.screens.countrydetails.CountryDetailsSc
 fun CountryInfoList(
     countryList: List<Country>,
     onCountryRowTap: (Any?) -> Unit,
+    onFavorite: (Country) ->Unit,
     aboutTap: () -> Unit,
     onRefreshClick: () -> Unit
 ) {
-
 
     Column {
 
@@ -70,7 +71,9 @@ fun CountryInfoList(
 
         LazyColumn {
             items(countryList.size) { index ->
-                CountryInfoRow(countryList[index]) {
+                CountryInfoRow(
+                    country=countryList[index],
+                    onFavorite=onFavorite) {
                     onCountryRowTap(index)
                 }
             }

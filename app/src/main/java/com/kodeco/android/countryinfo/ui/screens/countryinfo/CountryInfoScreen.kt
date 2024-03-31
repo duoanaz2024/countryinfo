@@ -1,7 +1,6 @@
 package com.kodeco.android.countryinfo.ui.screens.countryinfo
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresExtension
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
@@ -32,7 +31,12 @@ fun CountryInfoScreen(
         when (val curState = countryState.value) {
             is CountryInfoState.Success -> {
                 val countryList = curState.countries
-                CountryInfoList(countryList, onCountryRowTap, aboutTap){
+                CountryInfoList(
+                    countryList=countryList,
+                    onCountryRowTap=onCountryRowTap,
+                    aboutTap=aboutTap,
+                    onFavorite={country -> viewModel.favorite(country)}
+                ){
                     viewModel.refreshCountries()
                 }
             }
@@ -46,7 +50,9 @@ fun CountryInfoScreen(
 
             }
             is CountryInfoState.Loading -> {
-                Loading(curState.upTime)
+                Loading(aboutTap=aboutTap){
+                    viewModel.refreshCountries()
+                }
 
             }
         }

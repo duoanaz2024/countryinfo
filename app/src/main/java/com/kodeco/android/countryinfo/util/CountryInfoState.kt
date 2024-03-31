@@ -12,5 +12,5 @@ sealed class CountryInfoState : Parcelable {
     class Error(val message: String?) : CountryInfoState(){
     }
 
-    data class Loading(val upTime: Int) : CountryInfoState()
+    data object Loading : CountryInfoState()
 }
