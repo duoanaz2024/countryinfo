@@ -29,6 +29,7 @@ class CountryRepositoryImpl(private val apiService: RemoteApiService,
             val cacheEnabled = prefs.getLocalStorageEnabled().take(1).first()
             // var favorites: List<String> = DataManager.favorites.toList()
             var favorites: List<String> = emptyList()
+            DataManager.favorites = setOf()
             if (cacheEnabled){
                 favorites = dao.getFavorites(true)
                 // DataManager.favorites = favorites.toSet()
