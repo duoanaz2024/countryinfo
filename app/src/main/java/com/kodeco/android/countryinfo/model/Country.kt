@@ -12,6 +12,7 @@ data class Country(
     val capital: List<String>?,
     val population: Long,
     val area: Double,
+    val isFavorite: Boolean = false,
     val flags: CountryFlags
 ) : Parcelable {
 

@@ -50,7 +50,7 @@ fun CountryInfoNavHost(repository: CountryRepository){
                     ),
                 )
             ) {
-                navController.popBackStack()
+                navController.navigateUp()
             }
 
         }
@@ -58,7 +58,7 @@ fun CountryInfoNavHost(repository: CountryRepository){
         composable("aboutScreen"){
             CountryAppAboutScreen(
             ){
-                navController.popBackStack()
+                navController.navigateUp()
             }
         }
 

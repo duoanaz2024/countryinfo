@@ -3,11 +3,20 @@ package com.kodeco.android.countryinfo.ui.screens.countrydetails
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
@@ -19,6 +28,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -30,14 +42,39 @@ import coil.request.ImageRequest
 import com.kodeco.android.countryinfo.model.Country
 import com.kodeco.android.countryinfo.util.CountryInfoState
 
+enum class MapState {
+    Shrunk,
+    Expanded
+}
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CountryDetailsScreen(viewModel: CountryDetailsViewModel,
                          onNavigateUp: () -> Unit) {
     val country = viewModel.country
+
     if (country != null){
         val c: String? = country.capital?.get(0)
         val capital: String = c ?: "Not Applicable"
+
+        val mapState = remember { mutableStateOf(MapState.Shrunk) }
+        val transition = updateTransition(targetState = mapState, "Favorite")
+
+        val size = transition.animateDp(label = "Size Transition") { state ->
+            when(state.value){
+                MapState.Shrunk -> 100.dp
+                MapState.Expanded -> 200.dp
+            }
+        }
+
+        val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
+        val animatedColor by infiniteTransition.animateColor(
+            initialValue = Color(0xFF60DDAD),
+            targetValue = Color(0xFF4285F4),
+            animationSpec = infiniteRepeatable(tween(1000), RepeatMode.Reverse),
+            label = "color"
+        )
+
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = Color.White
@@ -66,12 +103,13 @@ fun CountryDetailsScreen(viewModel: CountryDetailsViewModel,
                         }
                     )
                 }, content = {
-                    Column() {
+                    Column {
                         Spacer(modifier = Modifier.height(75.dp))
                         Text(text = "Capital: $capital",
-                            Modifier.padding(6.dp))
+                            modifier = Modifier.padding(6.dp),
+                            color = animatedColor)
                         Text(text = "Population: " + country.population,
-                            Modifier.padding(6.dp))
+                            modifier = Modifier.padding(6.dp))
                         Text(text = "Area: " + country.area,
                             Modifier.padding(6.dp))
                         SubcomposeAsyncImage(
@@ -84,7 +122,14 @@ fun CountryDetailsScreen(viewModel: CountryDetailsViewModel,
                             },
                             contentDescription = "Country Flag",
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier.padding(6.dp)
+                            modifier = Modifier.padding(6.dp).
+                            size(size.value).clickable {
+                                mapState.value = when(mapState.value){
+                                    MapState.Expanded -> MapState.Shrunk
+                                    MapState.Shrunk -> MapState.Expanded
+                                }
+
+                            }
                         )
 
 
