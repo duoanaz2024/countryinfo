@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -49,13 +50,14 @@ enum class MapState {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CountryDetailsScreen(viewModel: CountryDetailsViewModel,
-                         onNavigateUp: () -> Unit) {
-    val country = viewModel.country
+fun CountryDetailsScreen(
+    countryId: Int,
+    viewModel: CountryDetailsViewModel,
+    onNavigateUp: () -> Unit) {
+    val country = viewModel.getCountryDetails(countryId)
 
     if (country != null){
-        val c: String? = country.capital?.get(0)
-        val capital: String = c ?: "Not Applicable"
+        val capital: String = country.mainCapital
 
         val mapState = remember { mutableStateOf(MapState.Shrunk) }
         val transition = updateTransition(targetState = mapState, "Favorite")
@@ -98,7 +100,7 @@ fun CountryDetailsScreen(viewModel: CountryDetailsViewModel,
                             IconButton(onClick = {
                                 onNavigateUp()
                             }) {
-                                Icon(Icons.Filled.ArrowBack, "backIcon")
+                                Icon(Icons.AutoMirrored.Filled.ArrowBack, "backIcon")
                             }
                         }
                     )
@@ -114,7 +116,7 @@ fun CountryDetailsScreen(viewModel: CountryDetailsViewModel,
                             Modifier.padding(6.dp))
                         SubcomposeAsyncImage(
                             model = ImageRequest.Builder(LocalContext.current)
-                                .data(country.commonFlag)
+                                .data(country.flagUrl)
                                 .crossfade(true)
                                 .build(),
                             loading = {

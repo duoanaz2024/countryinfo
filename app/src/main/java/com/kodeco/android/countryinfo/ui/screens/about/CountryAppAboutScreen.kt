@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
@@ -62,7 +63,7 @@ fun CountryAppAboutScreen(onClick: () -> Unit) {
                         IconButton(onClick = {
                             onClick()
                         }) {
-                            Icon(Icons.Filled.ArrowBack, "backIcon")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "backIcon")
                         }
                     }
                 )

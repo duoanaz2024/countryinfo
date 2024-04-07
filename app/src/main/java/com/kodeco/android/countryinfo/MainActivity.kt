@@ -1,5 +1,6 @@
 package com.kodeco.android.countryinfo
 
+import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Build
@@ -7,16 +8,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresExtension
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kodeco.android.countryinfo.nav.CountryInfoNavHost
 import com.kodeco.android.countryinfo.networking.NetworkStatusChecker
-import com.kodeco.android.countryinfo.networking.buildApiService
-import com.kodeco.android.countryinfo.repositories.CountryRepositoryImpl
 import com.kodeco.android.countryinfo.ui.components.CountryErrorScreen
-import com.kodeco.android.countryinfo.ui.screens.countryinfo.CountryInfoScreen
-import com.kodeco.android.countryinfo.ui.screens.countryinfo.CountryInfoViewModel
 import com.kodeco.android.countryinfo.ui.theme.MyApplicationTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val networkStatusChecker by lazy {
@@ -27,13 +25,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val apiService by lazy { buildApiService() }
-
         setContent {
             MyApplicationTheme {
 
                 if (networkStatusChecker.hasInternetConnection()){
-                    CountryInfoNavHost(repository = CountryRepositoryImpl(apiService))
+                    CountryInfoNavHost()
 
                 }
                 else{

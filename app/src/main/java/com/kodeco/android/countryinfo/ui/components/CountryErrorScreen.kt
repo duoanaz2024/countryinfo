@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CountryErrorScreen(headline: String, subtitle: String, onClick: () -> Unit) {
-    val activity = (LocalContext.current as? Activity)
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -61,7 +60,3 @@ fun CountryErrorScreen(headline: String, subtitle: String, onClick: () -> Unit) 
     }
 }
 
-// TODO fill out this preview.
-@Preview
-@Composable
-fun CountryErrorScreenPreview() { }

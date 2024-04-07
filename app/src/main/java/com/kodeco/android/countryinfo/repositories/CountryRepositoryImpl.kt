@@ -3,40 +3,69 @@ package com.kodeco.android.countryinfo.repositories
 import android.util.Log
 import com.kodeco.android.countryinfo.model.Country
 import com.kodeco.android.countryinfo.networking.RemoteApiService
-import com.kodeco.android.countryinfo.repositories.DataManager.favorites
+import com.kodeco.android.countryinfo.networking.dao.CountryDao
+import com.kodeco.android.countryinfo.networking.preferences.CountryPrefs
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
 
 object DataManager {
 
     var favorites = setOf<String>()
-
     val countries: MutableStateFlow<List<Country>> = MutableStateFlow(emptyList())
 
 }
 
-class CountryRepositoryImpl(private val apiService: RemoteApiService) : CountryRepository {
+class CountryRepositoryImpl(private val apiService: RemoteApiService,
+                            private val dao: CountryDao,private val prefs: CountryPrefs) : CountryRepository {
 
     override val countries: StateFlow<List<Country>> = DataManager.countries.asStateFlow()
 
     override suspend fun fetchCountries() {
-        val response = apiService.getCountries()
 
-        DataManager.countries.value = emptyList()
-        DataManager.countries.value = try {
-            if (response.isNotEmpty()) {
-                response
-                    .toMutableList()
-                    .map { country ->
-                        country.copy(isFavorite = favorites.contains(country.commonName))
+        try{
+            val cacheEnabled = prefs.getLocalStorageEnabled().take(1).first()
+            // var favorites: List<String> = DataManager.favorites.toList()
+            var favorites: List<String> = emptyList()
+            if (cacheEnabled){
+                favorites = dao.getFavorites(true)
+                // DataManager.favorites = favorites.toSet()
+            }
+            DataManager.countries.value = try {
+                val response = apiService.getCountries()
+                if (response.isSuccessful) {
+                    val countryList = response.body()!!
+                        .toMutableList()
+                        .map { country ->
+                            country.copy(isFavorite = favorites.contains(country.commonName))
+                        }
+                    if (cacheEnabled){
+                        dao.insertCountries(countryList)
                     }
-            } else {
-                throw Throwable("Something Went Wrong")
+                    countryList
+                } else {
+                    if (cacheEnabled){
+                        dao.getCountries()
+                    }
+                    else{
+                        throw Exception(response.message())
+                    }
+                }
+            } catch (e: Exception) {
+                if (cacheEnabled){
+                    dao.getCountries()
+                }
+                else{
+                    throw Exception("${e.message}")
+                }
+
             }
         } catch (e: Exception) {
-            throw Throwable("Something Went Wrong")
+            throw Exception("Request failed: ${e.message}")
         }
+
 
     }
 
@@ -44,16 +73,35 @@ class CountryRepositoryImpl(private val apiService: RemoteApiService) : CountryR
         return DataManager.countries.value.getOrNull(index)
     }
 
-    override fun favorite(country: Country) {
-        favorites = if (favorites.contains(country.commonName)) {
-            favorites - country.commonName
-        } else {
-            favorites + country.commonName
+    override suspend fun favorite(country: Country) {
+        val cacheEnabled = prefs.getLocalStorageEnabled().take(1).first()
+        if (cacheEnabled){
+            if (dao.getCountries().isEmpty()){
+                dao.insertCountries(DataManager.countries.value)
+            }
         }
+        val favorites: List<String> = if (cacheEnabled){
+            dao.getFavorites(true)
+        } else {
+            val mutableList = DataManager.favorites.toMutableList()
+            if (mutableList.contains(country.commonName)){
+                mutableList.remove(country.commonName)
+            }
+            else{
+                mutableList.add(country.commonName)
+            }
+            DataManager.favorites = mutableList.toSet()
+            mutableList
+        }
+        var isFavorite = favorites.contains(country.commonName)
+        if (cacheEnabled){
+            isFavorite = !isFavorite
+            dao.updateCountry(country.copy(isFavorite = isFavorite))
+        }
+
         val index = DataManager.countries.value.indexOf(country)
         val mutableCountries = DataManager.countries.value.toMutableList()
-        mutableCountries[index] = mutableCountries[index].copy(isFavorite = favorites.contains(country.commonName))
+        mutableCountries[index] = mutableCountries[index].copy(isFavorite = isFavorite)
         DataManager.countries.value = mutableCountries.toList()
-        Log.d("INFO", favorites.toString())
     }
 }
