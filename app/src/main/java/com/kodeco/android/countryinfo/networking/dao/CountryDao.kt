@@ -32,5 +32,8 @@ interface CountryDao {
     @Query("SELECT commonName FROM countries where isFavorite = :isFavorite")
     suspend fun getFavorites(isFavorite: Boolean): List<String>
 
+    @Query("SELECT * FROM countries where commonName = :commonName")
+    suspend fun getCountry(commonName: String): Country
+
 
 }

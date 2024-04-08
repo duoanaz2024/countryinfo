@@ -47,7 +47,7 @@ class CountryRepositoryImpl(private val apiService: RemoteApiService,
                     }
                     countryList
                 } else {
-                    if (cacheEnabled){
+                    if (cacheEnabled && dao.getCountries().isNotEmpty()){
                         dao.getCountries()
                     }
                     else{
@@ -55,7 +55,7 @@ class CountryRepositoryImpl(private val apiService: RemoteApiService,
                     }
                 }
             } catch (e: Exception) {
-                if (cacheEnabled){
+                if (cacheEnabled && dao.getCountries().isNotEmpty()){
                     dao.getCountries()
                 }
                 else{

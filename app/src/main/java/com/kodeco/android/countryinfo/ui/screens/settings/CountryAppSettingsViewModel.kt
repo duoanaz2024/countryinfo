@@ -26,7 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CountryAppSettingsViewModel @Inject constructor(
     private val pref: CountryPrefs,
-    private val database: CountryDatabase
+    private val database: CountryDatabase,
+    private val repository: CountryRepository
 ) : ViewModel(){
 
     suspend fun toggleLocalStorage(checked: Boolean){
@@ -34,6 +35,12 @@ class CountryAppSettingsViewModel @Inject constructor(
         if (!checked){
             database.countryDao().deleteAllCountries()
         }
+        try{
+            repository.fetchCountries()
+        } catch (e: Exception) {
+            Log.d("INFO", "Exception Occurred: $e")
+        }
+
 
     }
 
