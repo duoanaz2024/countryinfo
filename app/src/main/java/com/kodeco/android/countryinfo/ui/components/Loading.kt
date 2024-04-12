@@ -15,11 +15,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -53,10 +58,13 @@ fun Loading(aboutTap: () -> Unit,
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically) {
 
-            Text(text = "Country",
-                Modifier.padding(6.dp))
+            IconButton(onClick = {}) {
+                Icon(imageVector = Icons.Default.Settings,
+                    contentDescription = "Settings",
+                    tint = Color.Black)
+            }
 
-            Spacer(modifier = Modifier.weight((0.8f)))
+            Spacer(modifier = Modifier.weight((1f)))
 
             Button(
                 onClick = { onRefreshClick() }) {
@@ -65,14 +73,11 @@ fun Loading(aboutTap: () -> Unit,
 
             Spacer(modifier = Modifier.weight((1f)))
 
-            Image(
-                painter = painterResource(id = R.drawable.icons8_info_94),
-                contentDescription = "About",
-                Modifier
-                    .padding(6.dp)
-                    .clickable { aboutTap() },
-
-                )
+            IconButton(onClick = {aboutTap()}) {
+                Icon(imageVector = Icons.Default.Info,
+                    contentDescription = "About",
+                    tint = Color.Black)
+            }
 
         }
 

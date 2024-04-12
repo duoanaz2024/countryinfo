@@ -11,5 +11,5 @@ interface CountryRepository {
 
     fun getCountry(index: Int): Country?
 
-    fun favorite(country: Country)
+    suspend fun favorite(country: Country)
 }

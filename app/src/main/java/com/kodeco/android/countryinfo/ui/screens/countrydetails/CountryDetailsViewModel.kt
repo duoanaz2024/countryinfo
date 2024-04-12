@@ -6,21 +6,18 @@ import androidx.lifecycle.viewModelScope
 import com.kodeco.android.countryinfo.model.Country
 import com.kodeco.android.countryinfo.repositories.CountryRepository
 import com.kodeco.android.countryinfo.ui.screens.countryinfo.CountryInfoViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CountryDetailsViewModel (private val countryId: Int,
-                               private val repository: CountryRepository) : ViewModel() {
-
-    class CountryDetailsViewModelFactory(private val countryId: Int,
-                                         private val repository: CountryRepository) :
-        ViewModelProvider.NewInstanceFactory() {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T =
-            CountryDetailsViewModel(countryId, repository) as T
-    }
-    var country: Country? = null
-    init {
-        country = repository.getCountry(countryId)
+@HiltViewModel
+class CountryDetailsViewModel @Inject constructor(
+    private val repository: CountryRepository
+) : ViewModel() {
+    fun getCountryDetails(countryId: Int): Country? {
+        return repository.getCountry(countryId)
     }
 
 }
+
+
